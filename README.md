@@ -1,16 +1,57 @@
-# React + Vite
+# THE FRAGMENT SEEKER
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A cyberpunk-inspired ARG / OSINT puzzle game built with React + Vite.
 
-Currently, two official plugins are available:
+Players recover hidden archive fragments through:
+- Caesar Cipher decoding
+- HEX → RGB conversion
+- Social media investigation
+- Physical QR scanning
+- WiFi signal clues
+- Final master access recovery
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## Preview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+THE FRAGMENT SEEKER simulates a corrupted digital archive where players must recover hidden fragments and unlock the final system override.
 
-## Expanding the ESLint configuration
+Features:
+- Terminal-style cyberpunk UI
+- Animated glitch effects
+- Audio feedback system
+- Countdown timer
+- Fragment inventory system
+- Hidden master route
+- Physical QR integration
+- Multi-step puzzle progression
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Tech Stack
+
+- React
+- Vite
+- TailwindCSS
+- React Router DOM
+
+---
+
+## Project Structure
+
+```bash
+src/
+│
+├── assets/
+│   ├── fragments/
+│   ├── final/
+│   ├── sounds/
+│   └── campus.jpg
+│
+├── pages/
+│   ├── MainGame.jsx
+│   ├── ScanPage.jsx
+│   └── FinalPage.jsx
+│
+├── App.jsx
+└── main.jsx
