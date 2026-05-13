@@ -30,11 +30,19 @@ export default function MainGame() {
 
   const [hexAnswer, setHexAnswer] = useState("");
 
+  const [masterKey, setMasterKey] = useState("");
+
   const [showFragment1, setShowFragment1] = useState(false);
 
   const [showFragment2, setShowFragment2] = useState(false);
 
   const [showFragment3, setShowFragment3] = useState(false);
+
+  const [fragments, setFragments] = useState({
+    f1: false,
+    f2: false,
+    f3: false,
+  });
 
   // =========================
   // AUDIO
@@ -173,14 +181,19 @@ export default function MainGame() {
   }, []);
 
   // =========================
-  // CAESAR CHECK
+  // STEP 1 CHECK
   // =========================
 
   const checkCaesar = () => {
 
-    if (caesarAnswer.trim() === "58") {
+    if (caesarAnswer.trim() === "03285") {
 
       playSuccess();
+
+      setFragments((prev) => ({
+        ...prev,
+        f1: true,
+      }));
 
       setMessage("ACCESS GRANTED");
 
@@ -188,7 +201,7 @@ export default function MainGame() {
 
         setShowFragment1(true);
 
-      }, 800);
+      }, 700);
 
       setTimeout(() => {
 
@@ -198,7 +211,7 @@ export default function MainGame() {
 
         setStep(2);
 
-      }, 4000);
+      }, 3500);
 
     } else {
 
@@ -215,7 +228,7 @@ export default function MainGame() {
   };
 
   // =========================
-  // GPS CHECK
+  // STEP 3 CHECK
   // =========================
 
   const checkHex = () => {
@@ -224,21 +237,22 @@ export default function MainGame() {
       .replaceAll(" ", "")
       .toLowerCase();
 
-    if (
-      answer.includes("124") &&
-      answer.includes("75") &&
-      answer.includes("105")
-    ) {
+    if (answer === "12475105") {
 
       playSuccess();
 
-      setMessage("COORDINATES RECOVERED");
+      setFragments((prev) => ({
+        ...prev,
+        f3: true,
+      }));
+
+      setMessage("SIGNAL DECRYPTED");
 
       setTimeout(() => {
 
         setShowFragment3(true);
 
-      }, 800);
+      }, 700);
 
       setTimeout(() => {
 
@@ -248,13 +262,56 @@ export default function MainGame() {
 
         setStep(4);
 
-      }, 4000);
+      }, 3500);
 
     } else {
 
       playBeep();
 
       setMessage("CORRUPTED DATA");
+
+      setTimeout(() => {
+
+        setMessage("");
+
+      }, 1500);
+    }
+  };
+
+  // =========================
+  // MASTER KEY
+  // =========================
+
+  const checkMasterKey = () => {
+
+    const key = masterKey.trim().toLowerCase();
+
+    if (
+      key === "john von neumann" ||
+      key === "johnvonneumann"
+    ) {
+
+      playSuccess();
+
+      setFragments({
+        f1: true,
+        f2: true,
+        f3: true,
+      });
+
+      setMessage("MASTER ACCESS GRANTED");
+
+      setTimeout(() => {
+
+        setStep(999);
+
+      }, 1500);
+
+    } else {
+
+      playBeep();
+
+      setMessage("ACCESS DENIED");
 
       setTimeout(() => {
 
@@ -309,7 +366,98 @@ export default function MainGame() {
 
       </div>
 
-      {/* BOOT */}
+      {/* INVENTORY */}
+      <div className="
+        absolute
+        top-28
+        left-5
+        border
+        border-cyan-500
+        rounded-2xl
+        bg-black/70
+        backdrop-blur-md
+        p-5
+        z-50
+        w-56
+      ">
+
+        <p className="text-cyan-300 mb-4 tracking-widest text-sm">
+          FRAGMENT INVENTORY
+        </p>
+
+        <div className="space-y-3 text-sm">
+
+          <div className={fragments.f1 ? "text-green-400" : "text-zinc-600"}>
+            {fragments.f1 ? "[✓]" : "[ ]"} Fragment 01
+          </div>
+
+          <div className={fragments.f2 ? "text-yellow-400" : "text-zinc-600"}>
+            {fragments.f2 ? "[✓]" : "[ ]"} Fragment 02
+          </div>
+
+          <div className={fragments.f3 ? "text-purple-400" : "text-zinc-600"}>
+            {fragments.f3 ? "[✓]" : "[ ]"} Fragment 03
+          </div>
+
+        </div>
+
+      </div>
+
+      {/* MASTER ACCESS */}
+      <div className="
+        fixed
+        bottom-5
+        right-5
+        border
+        border-red-500
+        bg-black/80
+        backdrop-blur-md
+        p-5
+        rounded-2xl
+        z-50
+        w-80
+      ">
+
+        <p className="text-red-400 mb-3 text-sm tracking-widest">
+          MASTER ACCESS
+        </p>
+
+        <input
+          value={masterKey}
+          onChange={(e) => setMasterKey(e.target.value)}
+          placeholder="ENTER FINAL KEY"
+          className="
+            w-full
+            bg-black
+            border
+            border-red-500
+            px-4
+            py-3
+            rounded-xl
+            text-red-300
+            mb-3
+            outline-none
+          "
+        />
+
+        <button
+          onClick={checkMasterKey}
+          className="
+            w-full
+            bg-red-500
+            hover:bg-red-400
+            text-black
+            font-black
+            py-3
+            rounded-xl
+          "
+        >
+          OVERRIDE SYSTEM
+        </button>
+
+      </div>
+
+      {/* STEP 0 */}
       {step === 0 && (
 
         <div className="w-full max-w-2xl z-10">
@@ -323,7 +471,6 @@ export default function MainGame() {
               text-green-300
               mb-4
               animate-pulse
-              ${glitch ? "glitch" : ""}
             `}>
 
               THE FRAGMENT SEEKER
@@ -368,9 +515,7 @@ export default function MainGame() {
           <div className="border border-green-500 rounded-3xl p-8 bg-black/70 backdrop-blur-md">
 
             <h2 className="text-4xl font-black mb-8 text-green-200">
-
               ARCHIVE CORRUPTION DETECTED
-
             </h2>
 
             <div className="border border-green-700 rounded-2xl p-6 bg-black/80 mb-8">
@@ -380,15 +525,15 @@ export default function MainGame() {
               </p>
 
               <div className="text-green-500 break-all text-lg leading-8">
+                https://www.facebook.com/nguyen.quang.anh.1XXXXX
+              </div>
 
-                https://forms.gle/aQHcinDgLbg1NUu??
-
+              <div className="mt-6 text-green-400 text-xl tracking-[0.3em]">
+                ENCRYPTED STRING: 365;8
               </div>
 
               <div className="mt-6 border-t border-green-800 pt-4 text-green-600">
-
                 Hint: Caesar Cipher Shift = 3
-
               </div>
 
             </div>
@@ -425,16 +570,6 @@ export default function MainGame() {
               DECRYPT SIGNAL
             </button>
 
-            {message && (
-
-              <div className="mt-6 text-center text-2xl font-bold">
-
-                {message}
-
-              </div>
-
-            )}
-
           </div>
 
         </div>
@@ -448,9 +583,7 @@ export default function MainGame() {
           <div className="border border-yellow-500 rounded-3xl p-10 bg-black/70 text-center">
 
             <h1 className="text-5xl font-black text-yellow-300 mb-8">
-
               FRAGMENT 02 RECOVERED
-
             </h1>
 
             <img
@@ -477,22 +610,23 @@ export default function MainGame() {
             ">
 
               <p className="text-xl text-yellow-200 mb-4">
-
                 BONUS SIGNAL DETECTED
-
               </p>
 
               <p className="text-yellow-400 mb-8 leading-8">
-
                 Hidden archive discovered at the bottom
                 of the corrupted fanpage.
-
               </p>
 
               <button
                 onClick={() => {
 
                   playSuccess();
+
+                  setFragments((prev) => ({
+                    ...prev,
+                    f2: true,
+                  }));
 
                   setShowFragment2(true);
 
@@ -533,29 +667,35 @@ export default function MainGame() {
           <div className="border border-purple-500 rounded-3xl p-8 bg-black/70 text-purple-300">
 
             <h2 className="text-4xl font-black mb-8">
-
-              GPS RECOVERY
-
+              COLOR DATA RECOVERY
             </h2>
 
             <div className="bg-black border border-purple-700 rounded-2xl p-6 mb-8 text-xl leading-10">
 
-              <p>21.0RG</p>
+              <p className="text-purple-400">
+                ENCRYPTED COLOR SIGNAL
+              </p>
 
-              <p>B.525340</p>
+              <p className="text-5xl font-black text-pink-400 mt-4">
+                #7c4b69
+              </p>
 
               <div className="mt-8 border-t border-purple-800 pt-6">
 
-                <p className="mb-2">
-                  COLOR KEY
+                <p className="mb-3 text-purple-500">
+                  SYSTEM INSTRUCTION
                 </p>
 
-                <p className="text-3xl font-black text-pink-400">
+                <p>Convert HEX → RGB</p>
 
-                  #7c4b69
+                <p>Merge all RGB values continuously</p>
 
-                </p>
+                <p>No spaces. No commas.</p>
 
+              </div>
+
+              <div className="mt-8 border-t border-purple-800 pt-6 text-purple-600">
+                Hint: HEX to RGB Converter
               </div>
 
             </div>
@@ -563,7 +703,7 @@ export default function MainGame() {
             <input
               value={hexAnswer}
               onChange={(e) => setHexAnswer(e.target.value)}
-              placeholder="ENTER RGB VALUES"
+              placeholder="ENTER ACCESS CODE"
               className="
                 w-full
                 bg-black
@@ -573,6 +713,7 @@ export default function MainGame() {
                 px-5
                 py-4
                 mb-5
+                text-purple-300
               "
             />
 
@@ -588,18 +729,8 @@ export default function MainGame() {
                 rounded-xl
               "
             >
-              RECOVER LOCATION
+              DECRYPT SIGNAL
             </button>
-
-            {message && (
-
-              <div className="mt-6 text-center text-2xl font-bold">
-
-                {message}
-
-              </div>
-
-            )}
 
           </div>
 
@@ -607,18 +738,19 @@ export default function MainGame() {
       )}
 
       {/* STEP 4 */}
-        {step === 4 && (
+      {step === 4 && (
+
         <div className="max-w-5xl w-full z-10 text-center">
 
-            <div className="border border-cyan-500 rounded-3xl p-10 bg-black/70">
+          <div className="border border-cyan-500 rounded-3xl p-10 bg-black/70">
 
             <h1 className="text-6xl font-black text-cyan-300 mb-10">
-                FPT UNIVERSITY
+              FPT UNIVERSITY
             </h1>
 
             <img
-                src={campusImg}
-                className="
+              src={campusImg}
+              className="
                 w-full
                 max-w-4xl
                 rounded-3xl
@@ -626,41 +758,96 @@ export default function MainGame() {
                 border-cyan-500
                 mx-auto
                 mb-10
-                "
+              "
             />
 
-            {/* ONLY MESSAGE */}
             <div className="
-                border
-                border-cyan-700
-                rounded-2xl
-                p-10
-                bg-black/60
-                max-w-3xl
-                mx-auto
+              border
+              border-cyan-700
+              rounded-2xl
+              p-10
+              bg-black/60
+              max-w-3xl
+              mx-auto
             ">
 
-                <p className="text-3xl font-black text-cyan-300 mb-6 tracking-widest">
+              <p className="text-3xl font-black text-cyan-300 mb-6 tracking-widest">
                 PHYSICAL QR REQUIRED
-                </p>
+              </p>
 
-                <p className="text-cyan-200 leading-8 text-lg">
+              <p className="text-cyan-200 leading-8 text-lg">
                 This node cannot be accessed digitally.
                 <br />
                 You must use a physical device to continue the recovery.
-                </p>
+              </p>
 
-                <div className="mt-8 text-cyan-500 text-sm opacity-70">
+              <div className="mt-8 text-cyan-500 text-sm opacity-70">
                 Scan the QR code using your mobile camera
-                </div>
-
-                
+              </div>
 
             </div>
 
-            </div>
+          </div>
+
         </div>
-        )}
+      )}
+
+      {/* SECRET ENDING */}
+      {step === 999 && (
+
+        <div className="fixed inset-0 bg-black flex items-center justify-center z-[999]">
+
+          <div className="text-center">
+
+            <h1 className="text-7xl font-black text-red-500 mb-8 animate-pulse">
+              MASTER ACCESS
+            </h1>
+
+            <p className="text-red-300 text-2xl mb-10 tracking-widest">
+              SYSTEM OVERRIDE COMPLETE
+            </p>
+
+            <div className="
+              border
+              border-red-500
+              rounded-3xl
+              p-10
+              bg-black/70
+            ">
+
+              <p className="text-red-400 text-lg leading-10">
+                Hidden route unlocked.
+                <br />
+                Archive integrity restored.
+                <br />
+                Welcome back, Administrator.
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+      )}
+
+      {/* MESSAGE */}
+      {message && (
+
+        <div className="
+          fixed
+          top-24
+          left-1/2
+          -translate-x-1/2
+          text-2xl
+          font-black
+          z-[999]
+        ">
+
+          {message}
+
+        </div>
+
+      )}
 
       {/* FRAGMENT 1 */}
       {showFragment1 && (
@@ -670,9 +857,7 @@ export default function MainGame() {
           <div className="text-center">
 
             <p className="text-green-400 text-3xl mb-8">
-
               FRAGMENT 01 RECOVERED
-
             </p>
 
             <img
@@ -698,9 +883,7 @@ export default function MainGame() {
           <div className="text-center">
 
             <p className="text-yellow-400 text-3xl mb-8">
-
               FRAGMENT 02 RECOVERED
-
             </p>
 
             <img
@@ -726,9 +909,7 @@ export default function MainGame() {
           <div className="text-center">
 
             <p className="text-purple-400 text-3xl mb-8">
-
               FRAGMENT 03 RECOVERED
-
             </p>
 
             <img

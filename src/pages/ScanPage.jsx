@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import fragment4 from "../assets/fragments/fragment4.png";
 
 export default function ScanPage() {
 
@@ -23,7 +24,7 @@ export default function ScanPage() {
 
     } else {
 
-      setMessage("INVALID PIN");
+      setMessage("INVALID ACCESS CODE");
 
     }
   };
@@ -40,82 +41,147 @@ export default function ScanPage() {
       justify-center
       p-8
       font-mono
+      overflow-hidden
+      relative
     ">
 
-      <h1 className="text-5xl font-black mb-8">
-        PHYSICAL NODE
-      </h1>
-
-      <img
-        src="/fragment4.png"
-        className="w-64 rounded-2xl border border-cyan-500 mb-8"
-      />
-
+      {/* Background Glow */}
       <div className="
-        border
-        border-cyan-500
-        rounded-2xl
-        p-6
-        max-w-xl
-        w-full
-        bg-black/60
-      ">
+        absolute
+        inset-0
+        bg-[radial-gradient(circle_at_center,rgba(0,255,255,0.15),transparent_70%)]
+        pointer-events-none
+      " />
 
-        <p className="mb-6 text-xl">
-          WiFi Signal:
-        </p>
+      <div className="z-10 max-w-3xl w-full">
 
         <div className="
-          text-4xl
-          font-black
-          text-green-400
-          mb-8
-          tracking-[8px]
+          border
+          border-cyan-500
+          rounded-3xl
+          p-8
+          bg-black/70
+          backdrop-blur-md
+          shadow-[0_0_40px_rgba(0,255,255,0.15)]
         ">
-          110010
-        </div>
 
-        <p className="mb-4">
-          Convert Binary → Decimal
-        </p>
+          <h1 className="text-5xl font-black mb-8 text-center tracking-[6px]">
+            PHYSICAL NODE
+          </h1>
 
-        <input
-          value={pin}
-          onChange={(e) => setPin(e.target.value)}
-          placeholder="ENTER PIN"
-          className="
-            w-full
-            bg-black
-            border
-            border-cyan-500
-            rounded-xl
-            px-5
-            py-4
-            mb-4
-          "
-        />
+          <div className="flex justify-center mb-8">
 
-        <button
-          onClick={checkPin}
-          className="
-            w-full
-            bg-cyan-500
-            text-black
-            font-black
-            py-4
-            rounded-xl
-          "
-        >
-          UNLOCK
-        </button>
+            <img
+              src={fragment4}
+              className="
+                w-72
+                rounded-2xl
+                border
+                border-cyan-500
+                shadow-[0_0_30px_rgba(0,255,255,0.2)]
+              "
+            />
 
-        {message && (
-
-          <div className="mt-6 text-center text-2xl">
-            {message}
           </div>
 
-        )}
+          <div className="
+            border
+            border-cyan-800
+            rounded-2xl
+            p-6
+            bg-black/80
+            text-lg
+            leading-9
+          ">
+
+            <p className="text-cyan-300 mb-4">
+              SIGNAL TRACE DETECTED
+            </p>
+
+            <p className="text-cyan-500">
+              Nearby wireless activity has been detected.
+            </p>
+
+            <p className="text-cyan-500">
+              Search for the hidden network fragment.
+            </p>
+
+            <div className="
+              mt-8
+              border-t
+              border-cyan-900
+              pt-6
+              text-cyan-600
+            ">
+
+              <p>
+                Hint:
+              </p>
+
+              <p>
+                The access code is hidden within a nearby WiFi signal.
+              </p>
+
+              <p>
+                Decode the signal to recover the final PIN.
+              </p>
+
+            </div>
+
+          </div>
+
+          <input
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            placeholder="ENTER ACCESS CODE"
+            className="
+              w-full
+              bg-black
+              border
+              border-cyan-500
+              rounded-xl
+              px-5
+              py-4
+              mt-8
+              mb-5
+              text-cyan-300
+              outline-none
+            "
+          />
+
+          <button
+            onClick={checkPin}
+            className="
+              w-full
+              bg-cyan-500
+              hover:bg-cyan-400
+              text-black
+              font-black
+              py-4
+              rounded-xl
+              transition-all
+              duration-300
+            "
+          >
+            UNLOCK NODE
+          </button>
+
+          {message && (
+
+            <div className="
+              mt-6
+              text-center
+              text-2xl
+              font-bold
+            ">
+
+              {message}
+
+            </div>
+
+          )}
+
+        </div>
 
       </div>
 
