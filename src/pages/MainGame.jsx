@@ -20,7 +20,8 @@ export default function MainGame() {
 
   const [bootProgress, setBootProgress] = useState(0);
 
-  const [timeLeft, setTimeLeft] = useState(7200);
+  // 30 MINUTES
+  const [timeLeft, setTimeLeft] = useState(1800);
 
   const [glitch, setGlitch] = useState(false);
 
@@ -107,19 +108,15 @@ export default function MainGame() {
 
   const formatTime = () => {
 
-    const hours = String(
-      Math.floor(timeLeft / 3600)
-    ).padStart(2, "0");
-
     const minutes = String(
-      Math.floor((timeLeft % 3600) / 60)
+      Math.floor(timeLeft / 60)
     ).padStart(2, "0");
 
     const seconds = String(
       timeLeft % 60
     ).padStart(2, "0");
 
-    return `${hours}:${minutes}:${seconds}`;
+    return `${minutes}:${seconds}`;
   };
 
   // =========================
@@ -186,7 +183,7 @@ export default function MainGame() {
 
   const checkCaesar = () => {
 
-    if (caesarAnswer.trim() === "03285") {
+    if (caesarAnswer.trim() === "13") {
 
       playSuccess();
 
@@ -195,7 +192,7 @@ export default function MainGame() {
         f1: true,
       }));
 
-      setMessage("ACCESS GRANTED");
+      setMessage("Correct Answer");
 
       setTimeout(() => {
 
@@ -217,7 +214,7 @@ export default function MainGame() {
 
       playBeep();
 
-      setMessage("INVALID KEY");
+      setMessage("Try Again");
 
       setTimeout(() => {
 
@@ -237,7 +234,7 @@ export default function MainGame() {
       .replaceAll(" ", "")
       .toLowerCase();
 
-    if (answer === "12475105") {
+    if (answer === "fpt") {
 
       playSuccess();
 
@@ -246,7 +243,7 @@ export default function MainGame() {
         f3: true,
       }));
 
-      setMessage("SIGNAL DECRYPTED");
+      setMessage("Puzzle Solved");
 
       setTimeout(() => {
 
@@ -268,7 +265,7 @@ export default function MainGame() {
 
       playBeep();
 
-      setMessage("CORRUPTED DATA");
+      setMessage("Wrong Answer");
 
       setTimeout(() => {
 
@@ -287,8 +284,13 @@ export default function MainGame() {
     const key = masterKey.trim().toLowerCase();
 
     if (
-      key === "john von neumann" ||
-      key === "johnvonneumann"
+      key === "Hai Phong" ||
+      key === "haiphong" ||
+      key === "Hải Phòng" ||
+      key === "hải phòng" ||
+      key === "hai phong" ||
+      key === "TP Hải Phòng" ||
+      key === "HẢI PHÒNG" 
     ) {
 
       playSuccess();
@@ -299,7 +301,7 @@ export default function MainGame() {
         f3: true,
       });
 
-      setMessage("MASTER ACCESS GRANTED");
+      setMessage("Final Answer Correct");
 
       setTimeout(() => {
 
@@ -311,7 +313,7 @@ export default function MainGame() {
 
       playBeep();
 
-      setMessage("ACCESS DENIED");
+      setMessage("Incorrect Key");
 
       setTimeout(() => {
 
@@ -357,7 +359,7 @@ export default function MainGame() {
       <div className="absolute top-5 right-5 border border-red-500 px-5 py-3 rounded-xl bg-black/70 z-50">
 
         <p className="text-red-400 text-sm tracking-widest">
-          ARCHIVE COLLAPSE
+          TIME REMAINING
         </p>
 
         <p className="text-2xl font-bold text-red-300">
@@ -419,7 +421,7 @@ export default function MainGame() {
       ">
 
         <p className="text-red-400 mb-3 text-sm tracking-widest">
-          MASTER ACCESS
+          FINAL ANSWER
         </p>
 
         <input
@@ -452,7 +454,7 @@ export default function MainGame() {
             rounded-xl
           "
         >
-          OVERRIDE SYSTEM
+          SUBMIT
         </button>
 
       </div>
@@ -464,21 +466,21 @@ export default function MainGame() {
 
           <div className="text-center mb-10">
 
-            <h1 className={`
+            <h1 className="
               text-5xl
               font-black
               tracking-[8px]
               text-green-300
               mb-4
               animate-pulse
-            `}>
+            ">
 
               THE FRAGMENT SEEKER
 
             </h1>
 
             <p className="text-green-500 text-lg">
-              NEXUS ARCHIVE INITIALIZATION
+              INITIALIZING GAME
             </p>
 
           </div>
@@ -487,7 +489,7 @@ export default function MainGame() {
 
             <div className="flex justify-between mb-3 text-sm">
 
-              <span>BOOTING CORE SYSTEM...</span>
+              <span>LOADING...</span>
 
               <span>{bootProgress}%</span>
 
@@ -515,25 +517,21 @@ export default function MainGame() {
           <div className="border border-green-500 rounded-3xl p-8 bg-black/70 backdrop-blur-md">
 
             <h2 className="text-4xl font-black mb-8 text-green-200">
-              ARCHIVE CORRUPTION DETECTED
+              SYSTEM CHALLENGE
             </h2>
 
-            <div className="border border-green-700 rounded-2xl p-6 bg-black/80 mb-8">
+            <div className="border border-green-700 rounded-2xl p-10 bg-black/80 mb-8 text-center">
 
-              <p className="text-green-300 mb-3 text-lg">
-                TRANSMISSION DAMAGED
+              <p className="text-green-300 mb-6 text-xl">
+                Complete the sequence
               </p>
 
-              <div className="text-green-500 break-all text-lg leading-8">
-                https://www.facebook.com/nguyen.quang.anh.1XXXXX
+              <div className="text-6xl font-black text-green-400 tracking-[0.3em]">
+                1 1 2 3 5 8 ?
               </div>
 
-              <div className="mt-6 text-green-400 text-xl tracking-[0.3em]">
-                ENCRYPTED STRING: 365;8
-              </div>
-
-              <div className="mt-6 border-t border-green-800 pt-4 text-green-600">
-                Hint: Caesar Cipher Shift = 3
+              <div className="mt-8 border-t border-green-800 pt-4 text-green-600">
+                Hint: Add previous numbers
               </div>
 
             </div>
@@ -541,7 +539,7 @@ export default function MainGame() {
             <input
               value={caesarAnswer}
               onChange={(e) => setCaesarAnswer(e.target.value)}
-              placeholder="ENTER MISSING DIGITS"
+              placeholder="ENTER ANSWER"
               className="
                 w-full
                 bg-black
@@ -567,7 +565,7 @@ export default function MainGame() {
                 rounded-xl
               "
             >
-              DECRYPT SIGNAL
+              CONTINUE
             </button>
 
           </div>
@@ -610,12 +608,11 @@ export default function MainGame() {
             ">
 
               <p className="text-xl text-yellow-200 mb-4">
-                BONUS SIGNAL DETECTED
+                BONUS FRAGMENT FOUND
               </p>
 
               <p className="text-yellow-400 mb-8 leading-8">
-                Hidden archive discovered at the bottom
-                of the corrupted fanpage.
+                A hidden clue was discovered.
               </p>
 
               <button
@@ -649,7 +646,7 @@ export default function MainGame() {
                   rounded-2xl
                 "
               >
-                RECOVER BONUS FRAGMENT
+                CONTINUE
               </button>
 
             </div>
@@ -667,35 +664,25 @@ export default function MainGame() {
           <div className="border border-purple-500 rounded-3xl p-8 bg-black/70 text-purple-300">
 
             <h2 className="text-4xl font-black mb-8">
-              COLOR DATA RECOVERY
+              BINARY DECODER
             </h2>
 
-            <div className="bg-black border border-purple-700 rounded-2xl p-6 mb-8 text-xl leading-10">
+            <div className="bg-black border border-purple-700 rounded-2xl p-10 mb-8 text-center">
 
-              <p className="text-purple-400">
-                ENCRYPTED COLOR SIGNAL
+              <p className="text-purple-400 text-xl mb-6">
+                Decode the binary signal
               </p>
 
-              <p className="text-5xl font-black text-pink-400 mt-4">
-                #7c4b69
+              <p className="text-4xl font-black text-pink-400 tracking-[0.1em] leading-[2.5rem]">
+                01000110
+                <br />
+                01010000
+                <br />
+                01010100
               </p>
-
-              <div className="mt-8 border-t border-purple-800 pt-6">
-
-                <p className="mb-3 text-purple-500">
-                  SYSTEM INSTRUCTION
-                </p>
-
-                <p>Convert HEX → RGB</p>
-
-                <p>Merge all RGB values continuously</p>
-
-                <p>No spaces. No commas.</p>
-
-              </div>
 
               <div className="mt-8 border-t border-purple-800 pt-6 text-purple-600">
-                Hint: HEX to RGB Converter
+                Hint: Binary → Text
               </div>
 
             </div>
@@ -703,7 +690,7 @@ export default function MainGame() {
             <input
               value={hexAnswer}
               onChange={(e) => setHexAnswer(e.target.value)}
-              placeholder="ENTER ACCESS CODE"
+              placeholder="ENTER ANSWER"
               className="
                 w-full
                 bg-black
@@ -729,7 +716,7 @@ export default function MainGame() {
                 rounded-xl
               "
             >
-              DECRYPT SIGNAL
+              CONTINUE
             </button>
 
           </div>
@@ -772,17 +759,17 @@ export default function MainGame() {
             ">
 
               <p className="text-3xl font-black text-cyan-300 mb-6 tracking-widest">
-                PHYSICAL QR REQUIRED
+                REAL WORLD CHECKPOINT
               </p>
 
               <p className="text-cyan-200 leading-8 text-lg">
-                This node cannot be accessed digitally.
+                The next clue exists somewhere in the real world.
                 <br />
-                You must use a physical device to continue the recovery.
+                Use your phone camera to continue the journey.
               </p>
 
               <div className="mt-8 text-cyan-500 text-sm opacity-70">
-                Scan the QR code using your mobile camera
+                Scan the QR code nearby
               </div>
 
             </div>
@@ -800,11 +787,11 @@ export default function MainGame() {
           <div className="text-center">
 
             <h1 className="text-7xl font-black text-red-500 mb-8 animate-pulse">
-              MASTER ACCESS
+              CONGRATULATIONS
             </h1>
 
             <p className="text-red-300 text-2xl mb-10 tracking-widest">
-              SYSTEM OVERRIDE COMPLETE
+              FINAL PUZZLE COMPLETED
             </p>
 
             <div className="
@@ -816,11 +803,11 @@ export default function MainGame() {
             ">
 
               <p className="text-red-400 text-lg leading-10">
-                Hidden route unlocked.
+                All fragments recovered.
                 <br />
-                Archive integrity restored.
+                The mystery has been solved.
                 <br />
-                Welcome back, Administrator.
+                Welcome to the final archive.
               </p>
 
             </div>

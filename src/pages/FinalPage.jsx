@@ -15,8 +15,13 @@ export default function FinalPage() {
     const answer = finalKey.trim().toLowerCase();
 
     if (
-      answer === "john von neumann" ||
-      answer === "johnvonneumann"
+      answer === "Hai Phong" ||
+      answer === "haiphong" ||
+      answer === "Hải Phòng" ||
+      answer === "hải phòng" ||
+      answer === "hai phong" ||
+      answer === "TP Hải Phòng" ||
+      answer === "HẢI PHÒNG"
     ) {
 
       setSuccess(true);
