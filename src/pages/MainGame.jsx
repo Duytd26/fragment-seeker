@@ -561,11 +561,11 @@ export default function MainGame() {
               </p>
 
               <div className="text-4xl md:text-6xl font-black text-green-400 tracking-[0.1em] md:tracking-[0.3em]">
-                1 1 2 3 5 8 ?
+                1, 1, 2, 3, 5, 8, ?
               </div>
 
               <div className="mt-8 border-t border-green-800 pt-4 text-green-600">
-                Hint: Add previous numbers
+                Hint: Fn-1 + Fn-2
               </div>
 
             </div>
@@ -766,7 +766,7 @@ export default function MainGame() {
           <div className="border border-cyan-500 rounded-3xl p-5 md:p-10 bg-black/70">
 
             <h1 className="text-4xl md:text-6xl font-black text-cyan-300 mb-10">
-              FPT UNIVERSITY
+              QR code search
             </h1>
 
             <img
