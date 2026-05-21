@@ -1,5 +1,10 @@
-@import "tailwindcss";
 
+@import "tailwindcss";
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 /* ROOT */
 html,
 body,
@@ -201,4 +206,24 @@ img {
 ::-webkit-scrollbar-thumb {
   background: #00ff99;
   border-radius: 10px;
+}
+@media (max-width: 768px) {
+
+  body {
+    padding: 10px;
+  }
+
+  .glitch {
+    animation: none;
+  }
+
+  .glow-box {
+    animation: none;
+  }
+
+  input,
+  button {
+    width: 100%;
+    max-width: 100%;
+  }
 }

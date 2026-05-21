@@ -329,15 +329,18 @@ export default function MainGame() {
 
   const screenClass = `
     min-h-screen
+    w-full
     bg-black
     text-green-400
     flex
     flex-col
     items-center
-    justify-center
-    p-6
+    justify-start
+    p-4
+    md:p-6
     font-mono
-    overflow-hidden
+    overflow-x-hidden
+    overflow-y-auto
     relative
     transition-all
     duration-150
@@ -356,7 +359,25 @@ export default function MainGame() {
       </div>
 
       {/* TIMER */}
-      <div className="absolute top-5 right-5 border border-red-500 px-5 py-3 rounded-xl bg-black/70 z-50">
+      <div className="
+        fixed
+        top-3
+        right-3
+        md:top-5
+        md:right-5
+        border
+        border-red-500
+        px-4
+        py-2
+        md:px-5
+        md:py-3
+        rounded-2xl
+        bg-black/70
+        backdrop-blur-md
+        z-50
+        scale-90
+        md:scale-100
+      ">
 
         <p className="text-red-400 text-sm tracking-widest">
           TIME REMAINING
@@ -370,17 +391,24 @@ export default function MainGame() {
 
       {/* INVENTORY */}
       <div className="
-        absolute
-        top-28
-        left-5
+        relative
+        mt-24
+        mb-6
+        w-full
+        max-w-xs
+
         border
         border-cyan-500
         rounded-2xl
         bg-black/70
         backdrop-blur-md
         p-5
-        z-50
-        w-56
+        z-40
+
+        md:absolute
+        md:top-28
+        md:left-5
+        md:w-56
       ">
 
         <p className="text-cyan-300 mb-4 tracking-widest text-sm">
@@ -407,17 +435,23 @@ export default function MainGame() {
 
       {/* MASTER ACCESS */}
       <div className="
-        fixed
-        bottom-5
-        right-5
+        relative
+        mt-6
+        w-full
+        max-w-md
+
         border
         border-red-500
         bg-black/80
         backdrop-blur-md
         p-5
         rounded-2xl
-        z-50
-        w-80
+        z-40
+
+        md:fixed
+        md:bottom-5
+        md:right-5
+        md:w-80
       ">
 
         <p className="text-red-400 mb-3 text-sm tracking-widest">
@@ -467,7 +501,7 @@ export default function MainGame() {
           <div className="text-center mb-10">
 
             <h1 className="
-              text-5xl
+              text-3xl md:text-5xl
               font-black
               tracking-[8px]
               text-green-300
@@ -514,19 +548,19 @@ export default function MainGame() {
 
         <div className="max-w-4xl w-full z-10">
 
-          <div className="border border-green-500 rounded-3xl p-8 bg-black/70 backdrop-blur-md">
+          <div className="border border-green-500 rounded-3xl p-5 md:p-8 bg-black/70 backdrop-blur-md">
 
             <h2 className="text-4xl font-black mb-8 text-green-200">
               SYSTEM CHALLENGE
             </h2>
 
-            <div className="border border-green-700 rounded-2xl p-10 bg-black/80 mb-8 text-center">
+            <div className="border border-green-700 rounded-2xl p-5 md:p-10 bg-black/80 mb-8 text-center">
 
               <p className="text-green-300 mb-6 text-xl">
                 Complete the sequence
               </p>
 
-              <div className="text-6xl font-black text-green-400 tracking-[0.3em]">
+              <div className="text-4xl md:text-6xl font-black text-green-400 tracking-[0.1em] md:tracking-[0.3em]">
                 1 1 2 3 5 8 ?
               </div>
 
@@ -578,9 +612,9 @@ export default function MainGame() {
 
         <div className="max-w-5xl w-full z-10">
 
-          <div className="border border-yellow-500 rounded-3xl p-10 bg-black/70 text-center">
+          <div className="border border-yellow-500 rounded-3xl p-5 md:p-10 bg-black/70 text-center">
 
-            <h1 className="text-5xl font-black text-yellow-300 mb-8">
+            <h1 className="text-3xl md:text-5xl font-black text-yellow-300 mb-8">
               FRAGMENT 02 RECOVERED
             </h1>
 
@@ -661,13 +695,13 @@ export default function MainGame() {
 
         <div className="max-w-4xl w-full z-10">
 
-          <div className="border border-purple-500 rounded-3xl p-8 bg-black/70 text-purple-300">
+          <div className="border border-purple-500 rounded-3xl p-5 md:p-8 bg-black/70 text-purple-300">
 
             <h2 className="text-4xl font-black mb-8">
               BINARY DECODER
             </h2>
 
-            <div className="bg-black border border-purple-700 rounded-2xl p-10 mb-8 text-center">
+            <div className="bg-black border border-purple-700 rounded-2xl p-5 md:p-10 mb-8 text-center">
 
               <p className="text-purple-400 text-xl mb-6">
                 Decode the binary signal
@@ -729,9 +763,9 @@ export default function MainGame() {
 
         <div className="max-w-5xl w-full z-10 text-center">
 
-          <div className="border border-cyan-500 rounded-3xl p-10 bg-black/70">
+          <div className="border border-cyan-500 rounded-3xl p-5 md:p-10 bg-black/70">
 
-            <h1 className="text-6xl font-black text-cyan-300 mb-10">
+            <h1 className="text-4xl md:text-6xl font-black text-cyan-300 mb-10">
               FPT UNIVERSITY
             </h1>
 
@@ -752,7 +786,7 @@ export default function MainGame() {
               border
               border-cyan-700
               rounded-2xl
-              p-10
+              p-5 md:p-10
               bg-black/60
               max-w-3xl
               mx-auto
@@ -786,7 +820,7 @@ export default function MainGame() {
 
           <div className="text-center">
 
-            <h1 className="text-7xl font-black text-red-500 mb-8 animate-pulse">
+            <h1 className="text-4xl md:text-7xl font-black text-red-500 mb-8 animate-pulse">
               CONGRATULATIONS
             </h1>
 
@@ -798,7 +832,7 @@ export default function MainGame() {
               border
               border-red-500
               rounded-3xl
-              p-10
+              p-5 md:p-10
               bg-black/70
             ">
 
@@ -850,7 +884,7 @@ export default function MainGame() {
             <img
               src={fragment1}
               className="
-                w-96
+                w-full max-w-sm
                 rounded-3xl
                 border-4
                 border-green-500
@@ -876,7 +910,7 @@ export default function MainGame() {
             <img
               src={fragment2}
               className="
-                w-96
+                w-full max-w-sm
                 rounded-3xl
                 border-4
                 border-yellow-500
@@ -902,7 +936,7 @@ export default function MainGame() {
             <img
               src={fragment3}
               className="
-                w-96
+                w-full max-w-sm
                 rounded-3xl
                 border-4
                 border-purple-500
