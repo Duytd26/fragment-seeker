@@ -561,7 +561,7 @@ export default function MainGame() {
               </p>
 
               <div className="text-4xl md:text-6xl font-black text-green-400 tracking-[0.1em] md:tracking-[0.3em]">
-                1, 1, 2, 3, 5, 8, ?
+                1,1,2,3,5,8,?
               </div>
 
               <div className="mt-8 border-t border-green-800 pt-4 text-green-600">
