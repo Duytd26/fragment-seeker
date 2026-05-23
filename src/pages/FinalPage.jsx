@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import reconstructed from "../assets/final/reconstructed.png";
 
 // Import âm thanh
@@ -23,11 +23,9 @@ export default function FinalPage() {
   const [availablePieces, setAvailablePieces] = useState([]);
   const [board, setBoard] = useState([null, null, null, null, null]);
 
-  // States cho Custom Drag & Drop (Hỗ trợ Touch & Mouse)
+  // States cho Custom Drag & Drop
   const [draggingPiece, setDraggingPiece] = useState(null);
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
-  const boardRefs = useRef([]); // Lưu vị trí của 5 ô trống
-  const containerRef = useRef(null);
 
   const [severeError, setSevereError] = useState(false);
   const [timeLeft, setTimeLeft] = useState(() => {
@@ -35,29 +33,57 @@ export default function FinalPage() {
     return savedTime !== null ? parseInt(savedTime, 10) : 1800;
   });
 
-  const beepSound = useRef(null);
-  const successSound = useRef(null);
-  const winnerSound = useRef(null);
-
   useEffect(() => {
-    beepSound.current = new Audio(beepSoundFile);
-    successSound.current = new Audio(successSoundFile);
-    winnerSound.current = new Audio(winnerSoundFile);
     setAvailablePieces([...PUZZLE_PIECES].sort(() => Math.random() - 0.5));
   }, []);
 
-  const playAudio = (audioRef, volume = 0.5) => {
-    if (!audioRef.current) return;
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
-    audioRef.current.volume = volume;
-    audioRef.current.play().catch(() => {});
+  // --- AUDIO HELPER (Dùng HTML Audio Elements trực tiếp) ---
+  const playAudioId = (id, volume = 0.5) => {
+    const audioEl = document.getElementById(id);
+    if (!audioEl) return;
+    audioEl.pause();
+    audioEl.currentTime = 0;
+    audioEl.volume = volume;
+    const playPromise = audioEl.play();
+    if (playPromise !== undefined) {
+      playPromise.catch((e) => console.log(`Trình duyệt chặn play (${id}):`, e));
+    }
   };
 
-  const playBeep = () => playAudio(beepSound, 0.4);
-  const playSuccess = () => playAudio(successSound, 0.5);
-  const playWinner = () => playAudio(winnerSound, 0.6);
+  const playBeep = () => playAudioId("audio-beep", 0.4);
+  const playSuccess = () => playAudioId("audio-success", 0.6);
+  const playWinner = () => playAudioId("audio-winner", 0.8);
 
+  // Mẹo nhỏ: Bật âm lượng 0 một lần khi chạm màn hình để mở khóa AudioContext (iOS Fix)
+  useEffect(() => {
+    const unlockAudio = () => {
+      ["audio-beep", "audio-success", "audio-winner"].forEach((id) => {
+        const audioEl = document.getElementById(id);
+        if (audioEl) {
+          audioEl.volume = 0;
+          const promise = audioEl.play();
+          if (promise !== undefined) {
+            promise.then(() => {
+              audioEl.pause();
+              audioEl.currentTime = 0;
+            }).catch(() => {});
+          }
+        }
+      });
+      document.removeEventListener("touchstart", unlockAudio);
+      document.removeEventListener("click", unlockAudio);
+    };
+
+    document.addEventListener("touchstart", unlockAudio, { once: true });
+    document.addEventListener("click", unlockAudio, { once: true });
+
+    return () => {
+      document.removeEventListener("touchstart", unlockAudio);
+      document.removeEventListener("click", unlockAudio);
+    };
+  }, []);
+
+  // --- THỜI GIAN ---
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft((prev) => (prev <= 0 ? 0 : prev - 1));
@@ -82,20 +108,15 @@ export default function FinalPage() {
     setTimeout(() => setSevereError(false), 400);
   };
 
-  // --- LOGIC KÉO THẢ TÙY CHỈNH CHẠY ĐƯỢC TRÊN MOBILE & PC ---
-
-  // Bắt đầu chạm/click vào mảnh vỡ
+  // --- LOGIC KÉO THẢ TÙY CHỈNH ---
   const handlePointerDown = (e, piece) => {
-    e.preventDefault(); // Ngăn scroll màn hình khi vuốt trên đt
-    // Lấy tọa độ dựa trên touch hoặc mouse
+    e.preventDefault(); 
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
     setDraggingPiece(piece);
     setDragPos({ x: clientX, y: clientY });
   };
 
-  // Kéo đi
   const handlePointerMove = (e) => {
     if (!draggingPiece) return;
     e.preventDefault();
@@ -104,32 +125,27 @@ export default function FinalPage() {
     setDragPos({ x: clientX, y: clientY });
   };
 
-  // Thả tay ra
   const handlePointerUp = (e) => {
     if (!draggingPiece) return;
-
-    // Lấy tọa độ thả tay (lấy từ changedTouches đối với mobile)
     const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
     const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
 
     let droppedIndex = -1;
-
-    // Kiểm tra xem vị trí thả tay có nằm trong 1 trong 5 ô board không
-    boardRefs.current.forEach((ref, index) => {
-      if (ref) {
-        const rect = ref.getBoundingClientRect();
-        if (
-          clientX >= rect.left &&
-          clientX <= rect.right &&
-          clientY >= rect.top &&
-          clientY <= rect.bottom
-        ) {
-          droppedIndex = index;
-        }
+    
+    // Quét tìm ô chứa dựa trên element thay vì ref
+    const slots = document.querySelectorAll(".puzzle-slot");
+    slots.forEach((slot, index) => {
+      const rect = slot.getBoundingClientRect();
+      if (
+        clientX >= rect.left &&
+        clientX <= rect.right &&
+        clientY >= rect.top &&
+        clientY <= rect.bottom
+      ) {
+        droppedIndex = index;
       }
     });
 
-    // Nếu thả đúng vào ô và ô đó đang trống
     if (droppedIndex !== -1 && board[droppedIndex] === null) {
       const newBoard = [...board];
       newBoard[droppedIndex] = draggingPiece;
@@ -137,12 +153,9 @@ export default function FinalPage() {
       setAvailablePieces((prev) => prev.filter((p) => p.id !== draggingPiece.id));
       checkPuzzleCompletion(newBoard);
     }
-
-    // Reset trạng thái kéo
     setDraggingPiece(null);
   };
 
-  // Đăng ký event lắng nghe di chuyển chuột / vuốt toàn màn hình
   useEffect(() => {
     if (draggingPiece) {
       window.addEventListener("mousemove", handlePointerMove, { passive: false });
@@ -161,7 +174,7 @@ export default function FinalPage() {
       window.removeEventListener("mouseup", handlePointerUp);
       window.removeEventListener("touchend", handlePointerUp);
     };
-  }, [draggingPiece, board]); // Phụ thuộc thêm board để tính state mới nhất
+  }, [draggingPiece, board]);
 
   const handleRemoveFromBoard = (index, piece) => {
     const newBoard = [...board];
@@ -180,7 +193,7 @@ export default function FinalPage() {
       currentBoard[4]?.id === "p5";
 
     if (isCorrect) {
-      playSuccess();
+      playSuccess(); // Âm thanh kêu khi ghép đúng
       setIsAssembled(true);
     } else if (currentBoard.every((slot) => slot !== null)) {
       handlePenalty();
@@ -199,7 +212,7 @@ export default function FinalPage() {
       answer === "hải phòng" ||
       answer === "tp hải phòng"
     ) {
-      playWinner();
+      playWinner(); // Gọi Winner Play trước khi update state
       setSuccess(true);
       setMessage("ARCHIVE FULLY RESTORED");
     } else {
@@ -216,13 +229,22 @@ export default function FinalPage() {
   `;
 
   return (
-    <div className={screenClass} ref={containerRef}>
-      {/* Ghost (Mảnh ghép bay theo tay/chuột khi kéo) */}
+    <div className={screenClass}>
+      
+      {/* 
+        Rất quan trọng: Nhúng thẻ audio trực tiếp vào HTML.
+        Thuộc tính preload="auto" đảm bảo nó được tải về máy ngay lúc mở web. 
+      */}
+      <audio id="audio-beep" src={beepSoundFile} preload="auto" />
+      <audio id="audio-success" src={successSoundFile} preload="auto" />
+      <audio id="audio-winner" src={winnerSoundFile} preload="auto" />
+
+      {/* GHOST IMAGE KHI KÉO THẢ */}
       {draggingPiece && (
         <div
           className="fixed pointer-events-none z-[9999] opacity-80 border-2 border-white scale-110 shadow-2xl"
           style={{
-            left: dragPos.x - 30, // Chỉnh offset giữa ngón tay
+            left: dragPos.x - 30,
             top: dragPos.y - 60,
             width: "64px",
             height: "128px",
@@ -244,25 +266,24 @@ export default function FinalPage() {
         <div className="h-full w-full bg-[linear-gradient(rgba(255,255,0,0.15)_1px,transparent_1px)] bg-[size:100%_3px]" />
       </div>
 
-      <div className="z-10 text-center w-full max-w-6xl mt-12 md:mt-0">
+      <div className="z-10 text-center w-full max-w-6xl mt-12 md:mt-0 px-2 overflow-hidden">
         <p className="tracking-[0.2em] md:tracking-[0.5em] text-yellow-500 mb-2 md:mb-4 animate-pulse text-xs md:text-base">
           {isAssembled ? "IMAGE RECONSTRUCTED" : "DATA FRAGMENTED: 5 PARTS"}
         </p>
 
-        <h1 className="text-3xl md:text-7xl font-black mb-6 md:mb-10 text-yellow-300 tracking-widest leading-tight">
-          THE FRAGMENT <br className="md:hidden" /> SEEKER
+        <h1 className="text-[1.3rem] sm:text-3xl md:text-5xl lg:text-7xl font-black mb-6 md:mb-10 text-yellow-300 tracking-wider md:tracking-widest whitespace-nowrap overflow-hidden text-ellipsis">
+          THE FRAGMENT SEEKER
         </h1>
 
         {!isAssembled ? (
           <div className="flex flex-col items-center justify-center mb-6 gap-6 md:gap-8">
             
-            {/* Bảng ghép (Board 5 ô ngang) */}
             <div className="grid grid-cols-5 gap-1 md:gap-1 bg-zinc-900 border-4 border-yellow-600 p-1 md:p-2 rounded-xl">
               {board.map((piece, index) => (
                 <div
                   key={index}
-                  ref={(el) => (boardRefs.current[index] = el)}
                   className={`
+                    puzzle-slot /* Class này dùng cho hàm querySelectorAll tính vị trí thả */
                     w-12 h-24 sm:w-16 sm:h-32 md:w-32 md:h-64 border border-dashed flex items-center justify-center transition-colors
                     ${draggingPiece && !piece ? "border-yellow-400 bg-yellow-900/30" : "border-yellow-600/50 bg-black"}
                   `}
@@ -276,7 +297,6 @@ export default function FinalPage() {
                         backgroundPosition: piece.bgPos,
                         backgroundSize: "500% 100%",
                       }}
-                      title="Chạm để tháo mảnh ghép"
                     />
                   ) : (
                     <span className="text-zinc-700 font-bold opacity-30 select-none text-[10px] md:text-base">
@@ -287,7 +307,6 @@ export default function FinalPage() {
               ))}
             </div>
 
-            {/* Kho chứa mảnh vỡ */}
             <div className="flex flex-wrap gap-2 md:gap-4 justify-center p-3 md:p-4 border border-yellow-500/50 rounded-xl bg-black/50 min-h-[120px] md:min-h-[150px] w-full max-w-3xl">
               {availablePieces.length === 0 && <p className="text-zinc-500 text-xs md:text-sm p-4 my-auto">NO FRAGMENTS</p>}
               {availablePieces.map((piece) => (
@@ -311,17 +330,16 @@ export default function FinalPage() {
 
           </div>
         ) : (
-          /* ẢNH HOÀN CHỈNH */
           <div className="flex justify-center mb-8 animate-in zoom-in duration-500">
             <img
               src={reconstructed}
               alt="Reconstructed"
-              className={`w-full max-w-sm md:max-w-4xl rounded-xl md:rounded-3xl border-4 transition-all duration-300 ${severeError ? "border-red-600 shadow-[0_0_50px_rgba(255,0,0,0.4)]" : "border-yellow-500 shadow-[0_0_50px_rgba(255,255,0,0.2)]"}`}
+              className={`w-full max-w-[90%] md:max-w-4xl rounded-xl md:rounded-3xl border-4 transition-all duration-300 ${severeError ? "border-red-600 shadow-[0_0_50px_rgba(255,0,0,0.4)]" : "border-yellow-500 shadow-[0_0_50px_rgba(255,255,0,0.2)]"}`}
             />
           </div>
         )}
 
-        {/* FINAL INPUT */}
+        {/* BẢNG NHẬP FINAL KEY */}
         {isAssembled && !success && (
           <div className={`border bg-black/70 rounded-2xl md:rounded-3xl p-6 md:p-8 mb-6 max-w-2xl mx-auto transition-colors duration-300 w-full ${severeError ? "border-red-600" : "border-yellow-500"}`}>
             <p className="text-yellow-500 tracking-[0.2em] md:tracking-[0.3em] mb-4 md:mb-6 font-bold text-sm md:text-base">
@@ -344,7 +362,7 @@ export default function FinalPage() {
           </div>
         )}
 
-        {/* SUCCESS */}
+        {/* GIAO DIỆN PHÁ ĐẢO THÀNH CÔNG */}
         {success && (
           <div className="border border-green-500 bg-black/70 rounded-2xl md:rounded-3xl p-6 md:p-10 text-green-300 leading-6 md:leading-8 max-w-3xl mx-auto animate-in fade-in zoom-in duration-700 w-full">
             <h2 className="text-2xl md:text-5xl font-black mb-4 md:mb-8 text-green-400">MISSION COMPLETE!</h2>
@@ -354,7 +372,6 @@ export default function FinalPage() {
           </div>
         )}
 
-        {/* MESSAGES */}
         {message && (
           <div className={`mt-4 md:mt-6 text-lg md:text-2xl font-black ${message === "ARCHIVE FULLY RESTORED" ? "text-green-400" : "text-red-500 animate-pulse"}`}>
             {message}
