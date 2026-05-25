@@ -111,7 +111,7 @@ export default function MainGame() {
       hint: "Hỏi trực tiếp anh Khánh"
     },
     {
-      question: "Đại học FPT Hà Nội đã tổ chức bao nhiêu mùa TechFest?",
+      question: "FPTU AI Club đã tổ chức bao nhiêu mùa TechFest?",
       answer: "2",
       hint: "Thông tin truyền thông sự kiện"
     },
@@ -545,7 +545,7 @@ export default function MainGame() {
               mb-4
               animate-pulse
             ">
-              THE FRAGMENT SEEKER
+              THE HIDDEN SIGNAL
             </h1>
             <p className="text-green-500 text-lg">
               INITIALIZING GAME

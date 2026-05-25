@@ -272,7 +272,7 @@ export default function FinalPage() {
         </p>
 
         <h1 className="text-[1.3rem] sm:text-3xl md:text-5xl lg:text-7xl font-black mb-6 md:mb-10 text-yellow-300 tracking-wider md:tracking-widest whitespace-nowrap overflow-hidden text-ellipsis">
-          THE FRAGMENT SEEKER
+          THE HIDDEN SIGNAL
         </h1>
 
         {!isAssembled ? (
