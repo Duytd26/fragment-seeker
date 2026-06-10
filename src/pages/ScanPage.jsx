@@ -139,7 +139,7 @@ export default function ScanPage() {
 
       {/* --- GIAO DIỆN 1: MÀN HÌNH CHỜ --- */}
       {showSplash ? (
-        <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4 md:p-8 font-mono overflow-hidden">
+        <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4 md:p-8 font-mono overflow-hidden page-scene poster-card">
           <div className="absolute w-72 h-72 md:w-[500px] md:h-[500px] border border-cyan-500/20 rounded-full animate-ping" />
           
           <div className="relative z-10 text-center w-full px-4">
@@ -170,7 +170,7 @@ export default function ScanPage() {
         /* --- GIAO DIỆN 2: MÀN HÌNH CÂU HỎI --- */
         <div className={`
           min-h-screen bg-black text-cyan-400 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 
-          font-mono overflow-hidden relative transition-all duration-300
+          font-mono overflow-hidden relative transition-all duration-300 page-scene
           ${severeError ? "scale-[1.02] blur-[1px] translate-x-2 -translate-y-1 duration-75" : ""}
         `}>
           
@@ -195,11 +195,11 @@ export default function ScanPage() {
 
           <div className="z-10 max-w-2xl w-full mt-12 md:mt-0 animate-in fade-in zoom-in-95 duration-700">
             <div className={`
-              border rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 bg-black/70 backdrop-blur-md transition-all duration-300
+              border rounded-2xl md:rounded-3xl p-5 sm:p-6 md:p-8 bg-black/70 backdrop-blur-md transition-all duration-300 poster-card
               ${severeError ? "border-red-600 shadow-[0_0_30px_rgba(255,0,0,0.4)]" : "border-cyan-500 shadow-[0_0_40px_rgba(0,255,255,0.15)]"}
             `}>
               
-              <h1 className="text-2xl sm:text-3xl md:text-5xl font-black mb-6 md:mb-8 text-center tracking-[2px] md:tracking-[4px] uppercase">
+              <h1 className="text-2xl sm:text-3xl md:text-5xl font-black mb-6 md:mb-8 text-center tracking-[2px] md:tracking-[4px] uppercase neon-title">
                 STEP 5: SCRIPT EXECUTION
               </h1>
 
@@ -233,7 +233,7 @@ export default function ScanPage() {
                 onChange={(e) => setAnswer(e.target.value)}
                 placeholder="ENTER THE OUTPUT"
                 className={`
-                  w-full bg-black border rounded-lg md:rounded-xl px-4 py-3 md:px-5 md:py-4 mt-6 md:mt-8 mb-4 md:mb-5 outline-none uppercase text-center 
+                  w-full cyber-input border rounded-lg md:rounded-xl px-4 py-3 md:px-5 md:py-4 mt-6 md:mt-8 mb-4 md:mb-5 outline-none uppercase text-center 
                   text-lg md:text-2xl tracking-widest transition-colors duration-300
                   ${severeError ? "border-red-600 bg-red-900/20 text-white placeholder-red-300" : "border-cyan-500 text-cyan-300"}
                 `}
@@ -243,8 +243,8 @@ export default function ScanPage() {
               <button
                 onClick={checkAnswer}
                 className={`
-                  w-full font-black py-3 md:py-4 rounded-lg md:rounded-xl transition-all duration-300 text-base md:text-xl tracking-wider
-                  ${severeError ? "bg-red-600 text-white" : "bg-cyan-500 hover:bg-cyan-400 text-black"}
+                  w-full font-black py-3 md:py-4 rounded-lg md:rounded-xl transition-all duration-300 text-base md:text-xl tracking-wider glow-button
+                  ${severeError ? "bg-red-600 text-white" : "text-black"}
                 `}
               >
                 EXECUTE

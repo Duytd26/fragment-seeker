@@ -427,6 +427,7 @@ export default function MainGame() {
     overflow-y-auto
     relative
     transition-all
+    page-scene
     ${glitch ? "scale-[1.002] duration-150" : "duration-300"}
     ${severeError ? "scale-[1.02] blur-[1px] translate-x-2 -translate-y-1 duration-75" : ""}
   `;
@@ -474,8 +475,9 @@ export default function MainGame() {
         rounded-2xl
         bg-black/70
         p-5
+        poster-card
       ">
-        <p className="text-cyan-300 mb-4 font-bold">
+        <p className="text-cyan-300 mb-4 font-bold neon-accent">
           FRAGMENT INVENTORY
         </p>
         <div className="space-y-3 text-sm">
@@ -502,8 +504,9 @@ export default function MainGame() {
         bg-black/80
         p-5
         rounded-2xl
+        poster-card
       ">
-        <p className="text-red-400 mb-3 font-bold">
+        <p className="text-red-400 mb-3 font-bold neon-accent">
           FINAL MASTER KEY
         </p>
         <input
@@ -511,7 +514,7 @@ export default function MainGame() {
           onChange={(e) => setMasterKey(e.target.value)}
           placeholder="ENTER KEY TO OVERRIDE"
           className={`
-            w-full bg-black border px-4 py-3 rounded-xl mb-3 outline-none uppercase transition-colors
+            w-full cyber-input border px-4 py-3 rounded-xl mb-3 outline-none uppercase transition-colors
             ${severeError ? "border-red-600 text-white bg-red-900/30" : "border-red-500 text-red-300"}
           `}
           onKeyDown={(e) => e.key === 'Enter' && checkMasterKey()}
@@ -520,13 +523,13 @@ export default function MainGame() {
           onClick={checkMasterKey}
           className="
             w-full
-            bg-red-500
-            hover:bg-red-400
+            glow-button
+            hover:brightness-105
             text-black
             font-black
             py-3
             rounded-xl
-            transition-colors
+            transition-all
           "
         >
           VERIFY
@@ -609,8 +612,8 @@ export default function MainGame() {
               onChange={(e) => setAnswerInput(e.target.value)}
               placeholder="ENTER ANSWER"
               className={`
-                w-full bg-black border rounded-xl px-5 py-4 mb-5 uppercase outline-none transition-colors duration-300
-                ${severeError ? "border-red-600 bg-red-900/20 text-white placeholder-red-300" : ""}
+                w-full cyber-input border rounded-xl px-5 py-4 mb-5 uppercase outline-none transition-colors duration-300
+                ${severeError ? "border-red-600 bg-red-900/20 text-white placeholder-red-300" : "border-cyan-500 text-cyan-100"}
               `}
               onKeyDown={(e) => e.key === 'Enter' && checkAnswer(
                 currentQuestion.answer,
@@ -628,8 +631,8 @@ export default function MainGame() {
                 )
               }
               className={`
-                w-full font-black py-4 rounded-xl transition-all duration-300
-                ${severeError ? "bg-red-600 text-white" : "bg-white text-black hover:scale-[1.01]"}
+                w-full font-black py-4 rounded-xl transition-all duration-300 glow-button
+                ${severeError ? "bg-red-600 text-white" : "text-black"}
               `}
             >
               CONTINUE

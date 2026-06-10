@@ -224,7 +224,7 @@ export default function FinalPage() {
 
   const screenClass = `
     min-h-screen bg-black text-yellow-300 flex flex-col items-center justify-center p-4 md:p-8
-    font-mono relative overflow-hidden transition-all duration-300 touch-none
+    font-mono relative overflow-hidden transition-all duration-300 touch-none page-scene
     ${severeError ? "scale-[1.02] blur-[1px] translate-x-2 -translate-y-1 duration-75" : ""}
   `;
 
@@ -266,12 +266,12 @@ export default function FinalPage() {
         <div className="h-full w-full bg-[linear-gradient(rgba(255,255,0,0.15)_1px,transparent_1px)] bg-[size:100%_3px]" />
       </div>
 
-      <div className="z-10 text-center w-full max-w-6xl mt-12 md:mt-0 px-2 overflow-hidden">
-        <p className="tracking-[0.2em] md:tracking-[0.5em] text-yellow-500 mb-2 md:mb-4 animate-pulse text-xs md:text-base">
+      <div className="z-10 text-center w-full max-w-6xl mt-12 md:mt-0 px-2 overflow-hidden poster-card p-6 md:p-8 rounded-[2rem]">
+        <p className="tracking-[0.2em] md:tracking-[0.5em] text-yellow-500 mb-2 md:mb-4 animate-pulse text-xs md:text-base neon-accent">
           {isAssembled ? "IMAGE RECONSTRUCTED" : "DATA FRAGMENTED: 5 PARTS"}
         </p>
 
-        <h1 className="text-[1.3rem] sm:text-3xl md:text-5xl lg:text-7xl font-black mb-6 md:mb-10 text-yellow-300 tracking-wider md:tracking-widest whitespace-nowrap overflow-hidden text-ellipsis">
+        <h1 className="text-[1.3rem] sm:text-3xl md:text-5xl lg:text-7xl font-black mb-6 md:mb-10 text-yellow-300 tracking-wider md:tracking-widest whitespace-nowrap overflow-hidden text-ellipsis neon-title">
           THE HIDDEN SIGNAL
         </h1>
 
@@ -350,12 +350,12 @@ export default function FinalPage() {
               value={finalKey}
               onChange={(e) => setFinalKey(e.target.value)}
               placeholder="FINAL KEY"
-              className={`w-full bg-black border rounded-lg md:rounded-xl px-4 py-3 md:px-5 md:py-4 mb-4 outline-none uppercase text-center text-lg md:text-2xl tracking-widest transition-colors duration-300 ${severeError ? "border-red-600 bg-red-900/20 text-white placeholder-red-300" : "border-yellow-500 text-yellow-200"}`}
+              className={`w-full cyber-input border rounded-lg md:rounded-xl px-4 py-3 md:px-5 md:py-4 mb-4 outline-none uppercase text-center text-lg md:text-2xl tracking-widest transition-colors duration-300 ${severeError ? "border-red-600 bg-red-900/20 text-white placeholder-red-300" : "border-yellow-500 text-yellow-200"}`}
               onKeyDown={(e) => e.key === "Enter" && checkFinalKey()}
             />
             <button
               onClick={checkFinalKey}
-              className={`w-full font-black py-3 md:py-4 rounded-lg md:rounded-xl text-base md:text-xl transition-all duration-300 ${severeError ? "bg-red-600 text-white" : "bg-yellow-500 hover:bg-yellow-400 text-black"}`}
+              className={`w-full font-black py-3 md:py-4 rounded-lg md:rounded-xl text-base md:text-xl transition-all duration-300 glow-button ${severeError ? "bg-red-600 text-white" : "text-black"}`}
             >
               RESTORE ARCHIVE
             </button>
