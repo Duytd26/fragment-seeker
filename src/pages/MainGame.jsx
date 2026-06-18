@@ -71,9 +71,9 @@ export default function MainGame() {
 
   const step2Questions = [
     {
-      question: "FPTU AI Club là gì?",
-      answer: "cau lac bo tri tue nhan tao",
-      hint: "Tên đầy đủ của CLB"
+      question: "TECH-FEST có bao nhiêu nhà tài trợ?",
+      answer: "6",
+      hint: "Quan sát trên backdrop sự kiện"
     },
     {
       question: "FPTU AI Club đã có bao nhiêu follower trên Facebook?",
@@ -81,7 +81,7 @@ export default function MainGame() {
       hint: "7x00"
     },
     {
-      question: "Sự kiện TechFest có bao nhiêu gian hàng?",
+      question: "Sự kiện TECH-FEST có bao nhiêu gian hàng?",
       answer: "10",
       hint: "Quan sát toàn bộ khu vực sự kiện"
     },
@@ -91,19 +91,15 @@ export default function MainGame() {
       hint: "Tìm khu big game"
     },
     {
-      question: "Màu sắc chủ đạo trên áo đồng phục BTC TechFest hôm nay là màu gì?",
-      answer: "xanh than",
+      question: "Màu sắc chủ đạo trên áo đồng phục BTC TECH-FEST hôm nay là màu gì?",
+      answer: "xanh",
       hint: "Quan sát áo BTC"
     },
+    
     {
-      question: "Khẩu hiệu chính thức của TechFest năm nay là gì?",
-      answer: "break the limit",
-      hint: "Xuất hiện trên banner chính"
-    },
-    {
-      question: "Trong AI, hai chữ A và I là viết tắt của cụm từ tiếng Anh nào?",
-      answer: "artificial intelligence",
-      hint: "Kiến thức công nghệ cơ bản"
+      question: "World Cup được tổ chức bao nhiêu năm một lần?",
+      answer: "4",
+      hint: "pho"
     },
     {
       question: "Gặp anh Trưởng ban chuyên môn Nguyễn Nam Khánh để kiếm key cho câu hỏi này :3",
@@ -116,8 +112,8 @@ export default function MainGame() {
       hint: "Thông tin truyền thông sự kiện"
     },
     {
-      question: "Kể tên 3 đơn vị tổ chức sự kiện TechFest",
-      answer: "fptu ai club fcode dsac",
+      question: "Kể tên 2 đơn vị tổ chức sự kiện TechFest",
+      answer: "ai club and pdp",
       hint: "Xuất hiện trên poster sự kiện"
     },
     {
