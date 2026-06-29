@@ -547,13 +547,14 @@ export default function MainGame() {
               className="h-full w-full object-cover object-center"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 flex items-end justify-center p-4 sm:p-6 md:p-8">
+            <div className="absolute inset-x-0 bottom-0 flex items-center justify-center p-4 sm:p-6 md:p-8">
               <button
                 onClick={() => {
                   setGameStarted(true);
                   setStep(0);
                 }}
                 className="group relative w-full max-w-[220px] rounded-full border border-white/20 bg-white/90 px-5 py-3 text-base font-black uppercase tracking-[0.25em] text-black shadow-[0_0_20px_rgba(255,255,255,0.35)] transition-all duration-300 hover:scale-[1.03] hover:bg-white hover:shadow-[0_0_28px_rgba(255,255,255,0.5)] active:scale-[0.98]"
+                style={{ marginBottom: "18%" }}
               >
                 <span className="relative z-10">START</span>
               </button>
