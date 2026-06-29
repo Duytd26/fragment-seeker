@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import fragment1 from "../assets/fragments/fragment1.png";
 import fragment2 from "../assets/fragments/fragment2.png";
 import fragment3 from "../assets/fragments/fragment3.png";
+import startImage from "../assets/background.jpg";
 
 import campusImg from "../assets/campus.jpg";
 
@@ -176,6 +177,7 @@ export default function MainGame() {
 
   const [step, setStep] = useState(0);
   const [bootProgress, setBootProgress] = useState(0);
+  const [gameStarted, setGameStarted] = useState(false);
   // Khởi tạo thời gian: Lấy từ localStorage, nếu chưa có thì mặc định là 1800s
   const [timeLeft, setTimeLeft] = useState(() => {
     const savedTime = localStorage.getItem("techfest_timer");
@@ -267,6 +269,8 @@ export default function MainGame() {
   // =========================
 
   useEffect(() => {
+    if (!gameStarted) return undefined;
+
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 0) return 0;
@@ -274,7 +278,7 @@ export default function MainGame() {
       });
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [gameStarted]);
 
   const formatTime = () => {
     const minutes = String(Math.floor(timeLeft / 60)).padStart(2, "0");
@@ -287,6 +291,7 @@ export default function MainGame() {
   // =========================
 
   useEffect(() => {
+    if (!gameStarted) return;
     if (step === 0) {
       let progress = 0;
       const interval = setInterval(() => {
@@ -303,7 +308,7 @@ export default function MainGame() {
       }, 80);
       return () => clearInterval(interval);
     }
-  }, [step]);
+  }, [step, gameStarted]);
 
   // =========================
   // RANDOM GLITCH
@@ -531,6 +536,31 @@ export default function MainGame() {
           VERIFY
         </button>
       </div>
+
+      {/* START SCREEN */}
+      {!gameStarted && (
+        <div className="fixed inset-0 z-[999] flex items-center justify-center p-2 sm:p-4 bg-black/90 animate-[fadeIn_0.45s_ease-out]">
+          <div className="relative w-full max-w-5xl h-[calc(100vh-1rem)] sm:h-[90vh] max-h-[720px] overflow-hidden rounded-[1.25rem] sm:rounded-[2rem] border border-white/15 shadow-[0_0_40px_rgba(0,0,0,0.45)] bg-black animate-[slideUp_0.6s_ease-out]">
+            <img
+              src={startImage}
+              alt="Game Start"
+              className="h-full w-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 flex items-end justify-center p-4 sm:p-6 md:p-8">
+              <button
+                onClick={() => {
+                  setGameStarted(true);
+                  setStep(0);
+                }}
+                className="group relative w-full max-w-[220px] rounded-full border border-white/20 bg-white/90 px-5 py-3 text-base font-black uppercase tracking-[0.25em] text-black shadow-[0_0_20px_rgba(255,255,255,0.35)] transition-all duration-300 hover:scale-[1.03] hover:bg-white hover:shadow-[0_0_28px_rgba(255,255,255,0.5)] active:scale-[0.98]"
+              >
+                <span className="relative z-10">START</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* STEP 0 */}
       {step === 0 && (
