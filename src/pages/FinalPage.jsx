@@ -28,6 +28,7 @@ export default function FinalPage() {
   const [dragPos, setDragPos] = useState({ x: 0, y: 0 });
 
   const [severeError, setSevereError] = useState(false);
+  const [hintVisible, setHintVisible] = useState(false);
   const [timeLeft, setTimeLeft] = useState(() => {
     const savedTime = localStorage.getItem("techfest_timer");
     return savedTime !== null ? parseInt(savedTime, 10) : 1800;
@@ -36,6 +37,17 @@ export default function FinalPage() {
   useEffect(() => {
     setAvailablePieces([...PUZZLE_PIECES].sort(() => Math.random() - 0.5));
   }, []);
+
+  useEffect(() => {
+    if (!isAssembled || success) {
+      setHintVisible(false);
+      return;
+    }
+
+    setHintVisible(false);
+    const hintTimer = setTimeout(() => setHintVisible(true), 60000);
+    return () => clearTimeout(hintTimer);
+  }, [isAssembled, success]);
 
   // --- AUDIO HELPER (Dùng HTML Audio Elements trực tiếp) ---
   const playAudioId = (id, volume = 0.5) => {
@@ -359,6 +371,11 @@ export default function FinalPage() {
             >
               RESTORE ARCHIVE
             </button>
+            {hintVisible && (
+              <p className="mt-4 text-sm md:text-base text-cyan-300 leading-6 border-t border-yellow-500/40 pt-4">
+                HINT: Một thành phố lớn ở miền Bắc Việt Nam
+              </p>
+            )}
           </div>
         )}
 
