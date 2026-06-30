@@ -205,6 +205,20 @@ export default function MainGame() {
   });
 
   // =========================
+  // QR SCANNER (STEP 4)
+  // =========================
+
+  const [showQrScanner, setShowQrScanner] = useState(false);
+  const [qrLibReady, setQrLibReady] = useState(false);
+  const [qrCameraError, setQrCameraError] = useState("");
+  const [qrScanSuccess, setQrScanSuccess] = useState(false);
+
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+  const cameraStreamRef = useRef(null);
+  const scanRafRef = useRef(null);
+
+  // =========================
   // AUDIO
   // =========================
 
@@ -343,6 +357,155 @@ export default function MainGame() {
 
     return () => clearTimeout(hintTimer);
   }, [step, currentQuestion]);
+
+  // =========================
+  // QR SCANNER LOGIC
+  // =========================
+
+  // Tự động tải thư viện jsQR (qua CDN) một lần khi cần dùng,
+  // tránh phải cài thêm package vào project.
+  useEffect(() => {
+    if (window.jsQR) {
+      setQrLibReady(true);
+      return;
+    }
+    const existingScript = document.getElementById("jsqr-lib-script");
+    if (existingScript) {
+      existingScript.addEventListener("load", () => setQrLibReady(true));
+      return;
+    }
+    const script = document.createElement("script");
+    script.id = "jsqr-lib-script";
+    script.src = "https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js";
+    script.async = true;
+    script.onload = () => setQrLibReady(true);
+    script.onerror = () => setQrCameraError("KHÔNG THỂ TẢI THƯ VIỆN QR. KIỂM TRA KẾT NỐI MẠNG.");
+    document.body.appendChild(script);
+  }, []);
+
+  const stopQrCamera = () => {
+    if (scanRafRef.current) {
+      cancelAnimationFrame(scanRafRef.current);
+      scanRafRef.current = null;
+    }
+    if (cameraStreamRef.current) {
+      cameraStreamRef.current.getTracks().forEach((track) => track.stop());
+      cameraStreamRef.current = null;
+    }
+  };
+
+  const closeQrScanner = () => {
+    stopQrCamera();
+    setShowQrScanner(false);
+    setQrCameraError("");
+    setQrScanSuccess(false);
+  };
+
+  // Vòng lặp đọc từng khung hình từ camera, kiểm tra mã QR bằng jsQR
+  const tickQrScan = () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+
+    if (!video || !canvas || video.readyState !== video.HAVE_ENOUGH_DATA) {
+      scanRafRef.current = requestAnimationFrame(tickQrScan);
+      return;
+    }
+
+    canvas.height = video.videoHeight;
+    canvas.width = video.videoWidth;
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+    const code = window.jsQR
+      ? window.jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: "dontInvert",
+        })
+      : null;
+
+    if (code && code.data) {
+      handleQrResult(code.data);
+      return;
+    }
+
+    scanRafRef.current = requestAnimationFrame(tickQrScan);
+  };
+
+  const handleQrResult = (data) => {
+    stopQrCamera();
+    setQrScanSuccess(true);
+    playSuccess();
+
+    setTimeout(() => {
+      const value = (data || "").trim();
+      // Nếu mã QR chứa link, chuyển hướng người chơi tới trang scan tiếp theo.
+      // Nếu là link nội bộ cùng domain (vd: "/scan"), điều hướng luôn trong app.
+      if (/^https?:\/\//i.test(value)) {
+        window.location.href = value;
+      } else if (value) {
+        window.location.href = value.startsWith("/") ? value : `/${value}`;
+      } else {
+        closeQrScanner();
+      }
+    }, 900);
+  };
+
+  const startQrCamera = async () => {
+    setQrCameraError("");
+    setQrScanSuccess(false);
+
+    if (!qrLibReady && !window.jsQR) {
+      setQrCameraError("ĐANG TẢI THƯ VIỆN QR, VUI LÒNG THỬ LẠI SAU GIÂY LÁT.");
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: "environment" } },
+        audio: false,
+      });
+      cameraStreamRef.current = stream;
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play();
+      }
+
+      scanRafRef.current = requestAnimationFrame(tickQrScan);
+    } catch (err) {
+      setQrCameraError(
+        "KHÔNG THỂ TRUY CẬP CAMERA. VUI LÒNG CẤP QUYỀN CAMERA CHO TRÌNH DUYỆT."
+      );
+    }
+  };
+
+  const openQrScanner = () => {
+    setShowQrScanner(true);
+    setQrCameraError("");
+    setQrScanSuccess(false);
+  };
+
+  // Khi mở overlay quét QR thì bắt đầu camera, khi đóng thì tắt camera để tiết kiệm pin
+  useEffect(() => {
+    if (showQrScanner) {
+      startQrCamera();
+    }
+    return () => {
+      stopQrCamera();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showQrScanner, qrLibReady]);
+
+  // Đảm bảo camera được tắt khi rời khỏi step 4 hoặc unmount component
+  useEffect(() => {
+    if (step !== 4 && showQrScanner) {
+      closeQrScanner();
+    }
+  }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    return () => stopQrCamera();
+  }, []);
 
   // =========================
   // CHECK ANSWER
@@ -705,6 +868,48 @@ export default function MainGame() {
               <div className="mt-8 text-cyan-500 text-sm opacity-70">
                 Scan the nearby QR code
               </div>
+
+              <button
+                onClick={openQrScanner}
+                className="
+                  mt-8
+                  w-full
+                  max-w-sm
+                  mx-auto
+                  flex
+                  items-center
+                  justify-center
+                  gap-3
+                  font-black
+                  py-4
+                  rounded-xl
+                  glow-button
+                  text-black
+                  uppercase
+                  tracking-widest
+                  transition-all duration-300
+                  hover:brightness-105
+                  active:scale-[0.98]
+                "
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="w-6 h-6"
+                >
+                  <rect x="3" y="3" width="7" height="7" rx="1" />
+                  <rect x="14" y="3" width="7" height="7" rx="1" />
+                  <rect x="3" y="14" width="7" height="7" rx="1" />
+                  <path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h.01" />
+                </svg>
+                SCAN QR CODE
+              </button>
+              <p className="mt-3 text-cyan-600 text-xs opacity-60">
+                Bấm để mở camera quét mã QR ngay tại đây, không cần thoát ứng dụng.
+              </p>
             </div>
           </div>
         </div>
@@ -754,6 +959,74 @@ export default function MainGame() {
           ${message === "ACCESS GRANTED" || message === "SYSTEM UNLOCKED" ? "border-green-500 text-green-400" : "border-red-500 text-red-500 animate-pulse"}
         `}>
           {message}
+        </div>
+      )}
+
+      {/* QR SCANNER OVERLAY */}
+      {showQrScanner && (
+        <div className="fixed inset-0 bg-black/95 flex items-center justify-center z-[1000] p-4">
+          <div className="relative w-full max-w-md border border-cyan-500 rounded-3xl bg-black/90 p-5 md:p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-cyan-300 font-black text-lg md:text-xl tracking-widest">
+                QR SCANNER
+              </h3>
+              <button
+                onClick={closeQrScanner}
+                className="
+                  w-9 h-9
+                  flex items-center justify-center
+                  rounded-full
+                  border border-cyan-500
+                  text-cyan-300
+                  hover:bg-cyan-500/20
+                  transition-colors
+                "
+                aria-label="Đóng máy quét"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="relative w-full aspect-square overflow-hidden rounded-2xl border border-cyan-700 bg-black">
+              <video
+                ref={videoRef}
+                className="absolute inset-0 w-full h-full object-cover"
+                muted
+                playsInline
+              />
+              {/* Khung ngắm chỉ mang tính trang trí, hỗ trợ người chơi căn mã QR */}
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                <div
+                  className={`
+                    w-2/3 h-2/3 rounded-2xl border-4 transition-colors duration-300
+                    ${qrScanSuccess ? "border-green-400" : "border-cyan-400/70"}
+                  `}
+                />
+              </div>
+
+              {qrScanSuccess && (
+                <div className="absolute inset-0 bg-green-500/20 flex items-center justify-center">
+                  <p className="text-green-300 font-black text-xl tracking-widest animate-pulse">
+                    QR DETECTED
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <canvas ref={canvasRef} className="hidden" />
+
+            {qrCameraError && (
+              <p className="mt-4 text-red-400 text-sm text-center">
+                {qrCameraError}
+              </p>
+            )}
+
+            {!qrCameraError && !qrScanSuccess && (
+              <p className="mt-4 text-cyan-500 text-sm text-center opacity-70">
+                Đưa mã QR vào trong khung để quét tự động.
+              </p>
+            )}
+          </div>
         </div>
       )}
 
