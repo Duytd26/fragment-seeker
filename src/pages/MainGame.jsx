@@ -71,13 +71,9 @@ export default function MainGame() {
   ];
 
   const step2Questions = [
+    
     {
-      question: "TECH-FEST có bao nhiêu nhà tài trợ?",
-      answer: "6",
-      hint: "Quan sát trên backdrop sự kiện"
-    },
-    {
-      question: "FPTU AI Club đã có bao nhiêu follower trên Facebook?",
+      question: "FPTU AI Club đã có bao nhiêu followers trên Facebook?",
       answer: "7600",
       hint: "7x00"
     },
@@ -114,60 +110,62 @@ export default function MainGame() {
     },
     {
       question: "Kể tên 2 đơn vị tổ chức sự kiện TechFest",
-      answer: "ai club and pdp",
+      answer: "ai club va pdp",
       hint: "Xuất hiện trên poster sự kiện"
-    },
-    {
-      question: "Kể tên 1 nhà tài trợ bất kỳ của TechFest",
-      answer: "fpt software",
-      hint: "Logo xuất hiện ở backdrop"
     }
+    
   ];
 
   const step3Questions = [
     {
       question: "Gero kodi klu skryt, vedi pobeda.",
       answer: "nguoi choi giai ma mat ma an giau tim thay chien thang",
-      hint: "Dùng bảng từ điển Kanaxian"
+      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
     },
     {
       question: "Gero skan svezi.",
       answer: "nguoi choi quet tin hieu",
-      hint: "Skan = Scan"
+      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
     },
     {
       question: "Kodi klu, vedi lokos.",
-      answer: "giai ma mat ma tim thay dia diem"
+      answer: "giai ma mat ma tim thay dia diem",
+      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
     },
     {
       question: "Null set.",
       answer: "he thong loi",
-      hint: "Null = lỗi"
+      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
     },
     {
       question: "Gero vedi skryt lokos.",
-      answer: "nguoi choi tim thay dia diem bi an"
+      answer: "nguoi choi tim thay dia diem bi an",
+      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
     },
     {
       question: "Skan svezi, kodi klu.",
-      answer: "quet tin hieu giai ma mat ma"
+      answer: "quet tin hieu giai ma mat ma",
+      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
     },
     {
       question: "Gero pobeda.",
-      answer: "nguoi choi chien thang"
+      answer: "nguoi choi chien thang",
+      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
     },
     {
       question: "Nix pobeda.",
       answer: "khong chien thang",
-      hint: "Nix = phủ định"
+      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
     },
     {
       question: "Kodi svezi skryt.",
-      answer: "giai ma tin hieu an giau"
+      answer: "giai ma tin hieu an giau",
+      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
     },
     {
       question: "Vedi klu, gero pobeda.",
-      answer: "tim thay chia khoa nguoi choi chien thang"
+      answer: "tim thay chia khoa nguoi choi chien thang",
+      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
     }
   ];
 
