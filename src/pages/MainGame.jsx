@@ -79,12 +79,12 @@ export default function MainGame() {
     },
     {
       question: "Sự kiện TECH-FEST có bao nhiêu gian hàng?",
-      answer: "10",
+      answer: "11",
       hint: "Quan sát toàn bộ khu vực sự kiện"
     },
     {
       question: "Hiện tại có bao nhiêu chiếc RC car đang được trưng bày tại khu vực big game?",
-      answer: "2",
+      answer: "4",
       hint: "Tìm khu big game"
     },
     {
@@ -125,47 +125,47 @@ export default function MainGame() {
     {
       question: "Gero skan svezi.",
       answer: "nguoi choi quet tin hieu",
-      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
+      hint: "Truy cập fanpage TECH - FEST"
     },
     {
       question: "Kodi klu, vedi lokos.",
       answer: "giai ma mat ma tim thay dia diem",
-      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
+      hint: "Truy cập fanpage TECH - FEST"
     },
     {
       question: "Null set.",
       answer: "he thong loi",
-      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
+      hint: "Truy cập fanpage TECH - FEST"
     },
     {
       question: "Gero vedi skryt lokos.",
       answer: "nguoi choi tim thay dia diem bi an",
-      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
+      hint: "Truy cập fanpage TECH - FEST"
     },
     {
       question: "Skan svezi, kodi klu.",
       answer: "quet tin hieu giai ma mat ma",
-      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
+      hint: "Truy cập fanpage TECH - FEST"
     },
     {
       question: "Gero pobeda.",
       answer: "nguoi choi chien thang",
-      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
+      hint: "Truy cập fanpage TECH - FEST"
     },
     {
       question: "Nix pobeda.",
       answer: "khong chien thang",
-      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
+      hint: "Truy cập fanpage TECH - FEST"
     },
     {
       question: "Kodi svezi skryt.",
       answer: "giai ma tin hieu an giau",
-      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
+      hint: "Truy cập fanpage TECH - FEST"
     },
     {
       question: "Vedi klu, gero pobeda.",
       answer: "tim thay chia khoa nguoi choi chien thang",
-      hint: "Fanpage TECH-FEST có đăng bài giải thích Kanaxian"
+      hint: "Truy cập fanpage TECH - FEST"
     }
   ];
 
