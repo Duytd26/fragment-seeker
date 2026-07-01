@@ -250,6 +250,11 @@ export default function MainGame() {
   const [showFragment1, setShowFragment1] = useState(false);
   const [showFragment2, setShowFragment2] = useState(false);
   const [showFragment3, setShowFragment3] = useState(false);
+  const [successHint, setSuccessHint] = useState({
+    show: false,
+    title: "",
+    message: "",
+  });
 
   const [fragments, setFragments] = useState({
     f1: false,
@@ -574,6 +579,21 @@ export default function MainGame() {
   const checkAnswer = (correctAnswer, nextStep, fragmentKey) => {
     if (normalizeText(answerInput) === normalizeText(correctAnswer)) {
       playSuccess();
+
+      if (step === 4) {
+        setSuccessHint({
+          show: true,
+          title: "HINT",
+          message: "Một thành phố lớn của Việt Nam",
+        });
+
+        setTimeout(() => {
+          setSuccessHint({ show: false, title: "", message: "" });
+          setStep(nextStep);
+        }, 2600);
+        return;
+      }
+
       setFragments((prev) => ({
         ...prev,
         [fragmentKey]: true,
@@ -998,6 +1018,31 @@ export default function MainGame() {
                 <br />
                 Welcome to the final archive.
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUCCESS HINT OVERLAY */}
+      {successHint.show && (
+        <div className="fixed top-4 right-4 z-[1001] max-w-[90vw] sm:max-w-sm">
+          <div className="relative overflow-hidden rounded-2xl border border-cyan-400/70 bg-black/85 px-4 py-3 shadow-[0_0_25px_rgba(34,211,238,0.25)] backdrop-blur">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(34,211,238,0.18),_transparent_70%)] pointer-events-none" />
+            <div className="relative flex items-start gap-3">
+              <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-cyan-400/70 bg-cyan-500/10 text-cyan-300 animate-pulse">
+                <span className="text-sm">✦</span>
+              </div>
+              <div className="min-w-0">
+                <p className="mb-1 text-[0.65rem] font-black uppercase tracking-[0.3em] text-cyan-300/80">
+                  {successHint.title}
+                </p>
+                <div className="text-base sm:text-lg font-black uppercase tracking-[0.15em] text-transparent bg-clip-text bg-[linear-gradient(90deg,_#f8fafc_0%,_#67e8f9_35%,_#a78bfa_70%,_#f8fafc_100%)] animate-[pulse_1.6s_ease-in-out_infinite]">
+                  {successHint.message}
+                </div>
+                <p className="mt-1 text-[0.65rem] uppercase tracking-[0.2em] text-cyan-500/80">
+                  Đáp án đúng — chuyển tiếp...
+                </p>
+              </div>
             </div>
           </div>
         </div>
