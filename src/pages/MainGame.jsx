@@ -169,6 +169,59 @@ export default function MainGame() {
     }
   ];
 
+  const step4Questions = [
+    {
+      question: "24 + 18 = ?",
+      answer: "42",
+      hint: "Cộng 24 với 18 để được 42."
+    },
+    {
+      question: "87 - 35 = ?",
+      answer: "52",
+      hint: "Trừ 35 khỏi 87 để được 52."
+    },
+    {
+      question: "7 x 8 = ?",
+      answer: "56",
+      hint: "7 nhân 8 bằng 56."
+    },
+    {
+      question: "72 / 9 = ?",
+      answer: "8",
+      hint: "72 chia cho 9 bằng 8."
+    },
+    {
+      question: "15 + 27 = ?",
+      answer: "42",
+      hint: "Cộng 15 và 27."
+    },
+    {
+      question: "100 - 46 = ?",
+      answer: "54",
+      hint: "100 trừ 46 bằng 54."
+    },
+    {
+      question: "9 x 6 = ?",
+      answer: "54",
+      hint: "9 nhân 6 bằng 54."
+    },
+    {
+      question: "81 / 9 = ?",
+      answer: "9",
+      hint: "81 chia cho 9 bằng 9."
+    },
+    {
+      question: "33 + 19 = ?",
+      answer: "52",
+      hint: "33 cộng 19 bằng 52."
+    },
+    {
+      question: "64 / 8 = ?",
+      answer: "8",
+      hint: "64 chia cho 8 bằng 8."
+    }
+  ];
+
   // =========================
   // STATES
   // =========================
@@ -344,12 +397,19 @@ export default function MainGame() {
     if (step === 1) setCurrentQuestion(getRandomQuestion(step1Questions));
     if (step === 2) setCurrentQuestion(getRandomQuestion(step2Questions));
     if (step === 3) setCurrentQuestion(getRandomQuestion(step3Questions));
+    if (step === 4) setCurrentQuestion(getRandomQuestion(step4Questions));
     setAnswerInput("");
   }, [step]);
 
   useEffect(() => {
     setShowHint(false);
-    if (![1, 2, 3].includes(step)) return;
+
+    if (step === 3) {
+      setShowHint(true);
+      return;
+    }
+
+    if (![1, 2, 4].includes(step)) return;
 
     const hintTimer = setTimeout(() => {
       setShowHint(true);
@@ -498,7 +558,7 @@ export default function MainGame() {
 
   // Đảm bảo camera được tắt khi rời khỏi step 4 hoặc unmount component
   useEffect(() => {
-    if (step !== 4 && showQrScanner) {
+    if (step !== 5 && showQrScanner) {
       closeQrScanner();
     }
   }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -757,8 +817,8 @@ export default function MainGame() {
         </div>
       )}
 
-      {/* STEP 1 / 2 / 3 */}
-      {[1, 2, 3].includes(step) && currentQuestion && (
+      {/* STEP 1 / 2 / 3 / 4 */}
+      {[1, 2, 3, 4].includes(step) && currentQuestion && (
         <div className="max-w-4xl w-full z-10 mt-6">
           <div className={`
             rounded-3xl
@@ -775,6 +835,7 @@ export default function MainGame() {
               {step === 1 && "PHASE 1: Mystery Number Sequence"}
               {step === 2 && "PHASE 2: TechFest Event Knowledge Challenge"}
               {step === 3 && "PHASE 3: Kanaxian Decoding Missions"}
+              {step === 4 && "PHASE 4: Basic Arithmetic Challenge"}
             </h2>
 
             <div className={`
@@ -829,8 +890,8 @@ export default function MainGame() {
         </div>
       )}
 
-      {/* STEP 4 */}
-      {step === 4 && (
+      {/* STEP 5 */}
+      {step === 5 && (
         <div className="max-w-5xl w-full z-10 text-center mt-6">
           <div className="border border-cyan-500 rounded-3xl p-5 md:p-10 bg-black/70">
             <h1 className="text-4xl md:text-6xl font-black text-cyan-300 mb-10 tracking-widest">
