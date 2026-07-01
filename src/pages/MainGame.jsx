@@ -107,12 +107,8 @@ export default function MainGame() {
       question: "FPTU AI Club đã tổ chức bao nhiêu mùa TechFest?",
       answer: "2",
       hint: "Thông tin truyền thông sự kiện"
-    },
-    {
-      question: "Kể tên 2 đơn vị tổ chức sự kiện TechFest",
-      answer: "ai club va pdp",
-      hint: "Xuất hiện trên poster sự kiện"
     }
+    
     
   ];
 
@@ -942,7 +938,7 @@ export default function MainGame() {
                 REAL WORLD CHECKPOINT
               </p>
               <p className="text-cyan-200 leading-8 text-lg">
-                The next clue exists somewhere in the real world.
+                Somewhere in the library, a QR code is hidden.
                 <br />
                 Use your phone camera to continue the journey.
               </p>
